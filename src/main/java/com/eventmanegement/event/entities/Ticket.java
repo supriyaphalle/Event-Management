@@ -1,5 +1,6 @@
 package com.eventmanegement.event.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,11 +24,14 @@ public class Ticket {
     private int ticketPrice;
 
 
+    //    @JoinColumn(name = "user_Id")
+//    @JsonBackReference
     @ManyToOne
-//    @JoinColumn(name = "user_Id")
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    //    @JsonBackReference
+    @ManyToOne
     private Event event;
 
 

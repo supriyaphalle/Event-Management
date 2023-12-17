@@ -44,6 +44,8 @@ public class EventController {
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
 
         PageableResponse<EventDto> allEventBooking = this.eventService.getAllEventBooking(pageNumber, pageSize, sortBy, sortDir);
+
+      System.out.println(allEventBooking.getContent());
         return new ResponseEntity<>(allEventBooking, HttpStatus.OK);
     }
 

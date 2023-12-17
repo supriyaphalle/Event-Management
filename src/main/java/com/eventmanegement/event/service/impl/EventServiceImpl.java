@@ -56,7 +56,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public PageableResponse<EventDto> getAllEventBooking(int pageNumber, int pageSize, String sortBy, String sortDir) {
-        List<Event> all = eventRepository.findAll();
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Event> allPage = eventRepository.findAll(pageable);
@@ -82,9 +81,10 @@ public class EventServiceImpl implements EventService {
 
         Ticket save = this.ticketRepository.save(ticket);
 //            event1.setTickets();
-
-        user.setTicket(ticket);
-        userRepository.save(user);
+//        event1.getTickets().add(ticket);
+//        eventRepository.save(event1);
+//        user.getTickets().add(ticket);
+//        userRepository.save(user);
         return mapper.map(save, TicketDto.class);
 
     }

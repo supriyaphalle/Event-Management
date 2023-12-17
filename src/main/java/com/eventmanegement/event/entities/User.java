@@ -1,8 +1,10 @@
 package com.eventmanegement.event.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -30,9 +32,10 @@ public class User {
     private String password;
 
 
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "ticket_Id")
-    private Ticket ticket;
+    //    @JoinColumn(name = "ticket_Id")
+//    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Ticket> tickets = new ArrayList<>();
 
 //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name = "event_Id")
