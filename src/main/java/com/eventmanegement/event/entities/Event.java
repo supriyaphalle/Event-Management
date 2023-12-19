@@ -14,22 +14,14 @@ import java.util.List;
 @Builder
 @Entity
 public class Event {
-
-
     @Id
     private String eventId;
-    private Date date;
     private String name;
     private String location;
-    private int ticketQuantity;
     private int ticketPrice;
-
-
-
-
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets=new ArrayList<>();
+    private List<Ticket> tickets = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<User> users = new ArrayList<>();

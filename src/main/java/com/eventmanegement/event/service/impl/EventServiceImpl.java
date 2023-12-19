@@ -29,15 +29,15 @@ import java.util.UUID;
 public class EventServiceImpl implements EventService {
 
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
 
     @Autowired
-    TicketRepository ticketRepository;
+    private TicketRepository ticketRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    ModelMapper mapper;
+    private ModelMapper mapper;
 
 
     @Override
@@ -45,8 +45,6 @@ public class EventServiceImpl implements EventService {
         String id = UUID.randomUUID().toString();
 
         Event event = mapper.map(eventDto, Event.class);
-        event.setDate(new Date());
-
         event.setEventId(id);
         Event save = eventRepository.save(event);
         return mapper.map(save, EventDto.class);
@@ -56,7 +54,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public PageableResponse<EventDto> getAllEventBooking(int pageNumber, int pageSize, String sortBy, String sortDir) {
-        List<Event> all = eventRepository.findAll();
+//        List<Event> all = eventRepository.findAll();
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ? (Sort.by(sortBy).descending()) : (Sort.by(sortBy).ascending());
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Event> allPage = eventRepository.findAll(pageable);
@@ -70,23 +68,19 @@ public class EventServiceImpl implements EventService {
     public TicketDto RegisterUserForEvent(String eventId, String userId) {
         Event event1 = this.eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
         User user = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
-//        user.setEvent(event1);
-
         String ticketId = UUID.randomUUID().toString();
 
         Ticket ticket = Ticket.builder().ticketId(ticketId).ticketPrice(event1.getTicketPrice())
                 .bookingDate(new Date())
                 .user(user)
-                .ticketStatus("Conform")
+                .ticketStatus("Confirm")
                 .event(event1).build();
 
         Ticket save = this.ticketRepository.save(ticket);
-//            event1.setTickets();
-
-        user.setTicket(ticket);
+        user.getTickets().add(ticket);
         userRepository.save(user);
+        System.out.println(save.getTicketStatus());
         return mapper.map(save, TicketDto.class);
-
     }
 
 //    @Override
