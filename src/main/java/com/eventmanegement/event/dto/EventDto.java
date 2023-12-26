@@ -18,5 +18,5 @@ public class EventDto {
     private String location;
     private int ticketPrice;
 
-    private List<TicketDto> tickets = new ArrayList<>();
+//    private List<TicketDto> tickets = new ArrayList<>();
 }
