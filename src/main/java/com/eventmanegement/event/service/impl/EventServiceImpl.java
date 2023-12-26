@@ -97,14 +97,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public ViewBookingRequest viewBookingWithUser(String eventId) {
-        Event event = this.eventRepository.findById(eventId).orElseThrow(()->new ResourceNotFoundException("Event not found"));
+        Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+      System.out.println(event);
         List<Ticket> ticketList = this.ticketRepository.findByEvent(event);
+        System.out.println(ticketList);
         long count = ticketList.stream().count();
         List<User> list = ticketList.stream().map(t -> t.getUser()).collect(Collectors.toList());
         List<UserDto> userDtos = list.stream().map(l -> mapper.map(l, UserDto.class)).collect(Collectors.toList());
         ViewBookingRequest view = new ViewBookingRequest(count, userDtos);
-
-
         return view;
     }
 

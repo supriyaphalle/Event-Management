@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Ticket {
 
     @Id
