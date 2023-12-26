@@ -1,6 +1,10 @@
 package com.eventmanegement.event.dto;
 
+import com.eventmanegement.event.entities.Ticket;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -20,4 +24,6 @@ public class UserDto {
     private String password;
 
     private String about;
+
+//    private List<TicketDto> tickets = new ArrayList<>();
 }

@@ -33,7 +33,7 @@ public class User {
 
 
     //    @JoinColumn(name = "ticket_Id")
-//    @JsonManagedReference
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Ticket> tickets = new ArrayList<>();
 

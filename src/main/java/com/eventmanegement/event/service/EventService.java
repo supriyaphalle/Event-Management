@@ -1,9 +1,6 @@
 package com.eventmanegement.event.service;
 
-import com.eventmanegement.event.dto.EventDto;
-import com.eventmanegement.event.dto.PageableResponse;
-import com.eventmanegement.event.dto.TicketDto;
-import com.eventmanegement.event.dto.UserDto;
+import com.eventmanegement.event.dto.*;
 
 import java.awt.print.Pageable;
 import java.util.List;
@@ -17,9 +14,13 @@ public interface EventService {
 
     public TicketDto RegisterUserForEvent(String eventId, String userId);
 
+    TicketDto getTicketByTicketId(String ticketId);
+
 
 //    public void deleteEventWithUserId(String userId);
 //
 //    public void deleteEventByEventId(String eventId);
+
+    public ViewBookingRequest viewBookingWithUser(String eventId);
 
 }

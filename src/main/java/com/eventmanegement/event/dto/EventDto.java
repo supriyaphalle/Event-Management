@@ -23,5 +23,5 @@ public class EventDto {
     private int ticketQuantity;
     private int ticketPrice;
 
-    private List<TicketDto> tickets;
+//    private List<TicketDto> tickets;
 }

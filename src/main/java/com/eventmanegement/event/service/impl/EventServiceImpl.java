@@ -1,9 +1,7 @@
 package com.eventmanegement.event.service.impl;
 
 import com.eventmanegement.event.constants.AppConstants;
-import com.eventmanegement.event.dto.EventDto;
-import com.eventmanegement.event.dto.PageableResponse;
-import com.eventmanegement.event.dto.TicketDto;
+import com.eventmanegement.event.dto.*;
 import com.eventmanegement.event.entities.Event;
 import com.eventmanegement.event.entities.Ticket;
 import com.eventmanegement.event.entities.User;
@@ -23,7 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -89,6 +89,25 @@ public class EventServiceImpl implements EventService {
 
     }
 
+    @Override
+    public TicketDto getTicketByTicketId(String ticketId) {
+        Ticket ticket = this.ticketRepository.findById(ticketId).orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
+        return mapper.map(ticket, TicketDto.class);
+    }
+
+    @Override
+    public ViewBookingRequest viewBookingWithUser(String eventId) {
+        Event event = this.eventRepository.findById(eventId).orElseThrow(()->new ResourceNotFoundException("Event not found"));
+        List<Ticket> ticketList = this.ticketRepository.findByEvent(event);
+        long count = ticketList.stream().count();
+        List<User> list = ticketList.stream().map(t -> t.getUser()).collect(Collectors.toList());
+        List<UserDto> userDtos = list.stream().map(l -> mapper.map(l, UserDto.class)).collect(Collectors.toList());
+        ViewBookingRequest view = new ViewBookingRequest(count, userDtos);
+
+
+        return view;
+    }
+
 //    @Override
 //    public void deleteEventWithUserId(String userId) {
 //        User user = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
@@ -104,4 +123,6 @@ public class EventServiceImpl implements EventService {
 //        Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
 //        eventRepository.delete(event);
 //    }
+
+
 }

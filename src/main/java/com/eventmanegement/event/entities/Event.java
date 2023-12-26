@@ -17,7 +17,6 @@ import java.util.List;
 @Entity
 public class Event {
 
-
     @Id
     private String eventId;
     private Date date;
@@ -27,10 +26,8 @@ public class Event {
     private int ticketPrice;
 
     //    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JsonManagedReference
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Ticket> tickets = new ArrayList<>();
-
-//    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<User> users = new ArrayList<>();
+    
 }

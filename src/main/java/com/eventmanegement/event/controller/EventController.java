@@ -1,10 +1,11 @@
 package com.eventmanegement.event.controller;
 
 import com.eventmanegement.event.constants.AppConstants;
-import com.eventmanegement.event.dto.ApiResponseMessage;
+
 import com.eventmanegement.event.dto.EventDto;
 import com.eventmanegement.event.dto.PageableResponse;
 import com.eventmanegement.event.dto.TicketDto;
+import com.eventmanegement.event.dto.ViewBookingRequest;
 import com.eventmanegement.event.service.EventService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.HttpStatus;
@@ -45,7 +46,7 @@ public class EventController {
 
         PageableResponse<EventDto> allEventBooking = this.eventService.getAllEventBooking(pageNumber, pageSize, sortBy, sortDir);
 
-      System.out.println(allEventBooking.getContent());
+        System.out.println(allEventBooking.getContent());
         return new ResponseEntity<>(allEventBooking, HttpStatus.OK);
     }
 
@@ -56,6 +57,12 @@ public class EventController {
         return new ResponseEntity<>(ticketDto, HttpStatus.CREATED);
     }
 
+
+    @GetMapping("/ticket/{ticketId}")
+    public ResponseEntity<TicketDto> getTicketByTicketId(@PathVariable String ticketId) {
+        TicketDto ticketDto = this.eventService.getTicketByTicketId(ticketId);
+        return new ResponseEntity<>(ticketDto, HttpStatus.OK);
+    }
 
 //    @DeleteMapping("/user/{userId}")
 //    public ResponseEntity<ApiResponseMessage> deleteEventByUserID(@PathVariable String userId) {
@@ -74,5 +81,11 @@ public class EventController {
 //
 //        return new ResponseEntity<>(message, HttpStatus.OK);
 //    }
+
+    @GetMapping("/{eventId}")
+    public ResponseEntity<ViewBookingRequest> getBookingDetails(@PathVariable String eventId) {
+        ViewBookingRequest viewBookingRequest = this.eventService.viewBookingWithUser(eventId);
+        return new ResponseEntity<>(viewBookingRequest, HttpStatus.OK);
+    }
 
 }

@@ -23,15 +23,13 @@ public class Ticket {
 
     private int ticketPrice;
 
-
-    //    @JoinColumn(name = "user_Id")
-//    @JsonBackReference
     @ManyToOne
+    @JsonBackReference
     private User user;
 
-
-    //    @JsonBackReference
     @ManyToOne
+    @JoinColumn(name = "event_Id")
+    @JsonBackReference
     private Event event;
 
 
