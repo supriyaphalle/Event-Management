@@ -1,7 +1,10 @@
 package com.eventmanegement.event.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+
+import javax.persistence.*;
+
 import lombok.*;
 
 import java.util.ArrayList;

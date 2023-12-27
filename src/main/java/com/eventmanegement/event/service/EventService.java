@@ -23,4 +23,5 @@ public interface EventService {
 
     public ViewBookingRequest viewBookingWithUser(String eventId);
 
+    public String CancelEvent(String eventId);
 }

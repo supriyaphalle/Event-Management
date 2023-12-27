@@ -19,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -45,13 +48,20 @@ public class EventServiceImpl implements EventService {
         String id = UUID.randomUUID().toString();
 
         Event event = mapper.map(eventDto, Event.class);
-        event.setDate(new Date());
+        LocalDate date = LocalDate.ofEpochDay(0);
+        try {
+            date = LocalDate.parse(eventDto.getDate(), DateTimeFormatter.ISO_DATE);
+            System.out.println(date);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Exception : " + e);
+        } catch (DateTimeParseException e) {
+            System.out.println("Exception: " + e);
+        }
+        event.setDate(date);
 
         event.setEventId(id);
         Event save = eventRepository.save(event);
         return mapper.map(save, EventDto.class);
-
-
     }
 
     @Override
@@ -98,7 +108,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public ViewBookingRequest viewBookingWithUser(String eventId) {
         Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event not found"));
-      System.out.println(event);
+        System.out.println(event.getName());
         List<Ticket> ticketList = this.ticketRepository.findByEvent(event);
         System.out.println(ticketList);
         long count = ticketList.stream().count();
@@ -108,21 +118,28 @@ public class EventServiceImpl implements EventService {
         return view;
     }
 
-//    @Override
-//    public void deleteEventWithUserId(String userId) {
-//        User user = this.userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND));
-////        user.setEvent(null);
-//        User save = this.userRepository.save(user);
-//
-////        return mapper.map(save,UserDto.class);
-//
-//    }
-//
-//    @Override
-//    public void deleteEventByEventId(String eventId) {
-//        Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.NOT_FOUND));
-//        eventRepository.delete(event);
-//    }
+    @Override
+    public String CancelEvent(String eventId) {
+        Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new ResourceNotFoundException("Event not found with id:"));
+        System.out.println(event);
+        LocalDate currentDate = LocalDate.now();
+
+        long remainingDays = java.time.temporal.ChronoUnit.DAYS.between(currentDate, event.getDate());
+
+        if (remainingDays >= 2) {
+            this.eventRepository.deleteById(eventId);
+//            this.eventRepository.delete(event);
+            List<Ticket> tickets = this.ticketRepository.findByEvent(event);
+            for (Ticket t : tickets) {
+//                this.ticketRepository.delete(t);
+                this.ticketRepository.deleteById(t.getTicketId());
+            }
+            return "Event canceled Successfully";
+        } else {
+            return "Its too late to Cancel event";
+        }
+
+    }
 
 
 }

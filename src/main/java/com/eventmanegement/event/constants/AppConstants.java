@@ -14,5 +14,5 @@ public class AppConstants {
 
     public static final String SORT_BY = "name";
 
-    public static final String DATA_DELETED = "Data deleted successfully!!";
+    public static final String DATA_DELETED = "Event canceled successfully!!";
 }

@@ -2,10 +2,7 @@ package com.eventmanegement.event.controller;
 
 import com.eventmanegement.event.constants.AppConstants;
 
-import com.eventmanegement.event.dto.EventDto;
-import com.eventmanegement.event.dto.PageableResponse;
-import com.eventmanegement.event.dto.TicketDto;
-import com.eventmanegement.event.dto.ViewBookingRequest;
+import com.eventmanegement.event.dto.*;
 import com.eventmanegement.event.service.EventService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.HttpStatus;
@@ -64,28 +61,19 @@ public class EventController {
         return new ResponseEntity<>(ticketDto, HttpStatus.OK);
     }
 
-//    @DeleteMapping("/user/{userId}")
-//    public ResponseEntity<ApiResponseMessage> deleteEventByUserID(@PathVariable String userId) {
-//        this.eventService.deleteEventWithUserId(userId);
-//        ApiResponseMessage message = ApiResponseMessage.builder().message(AppConstants.DATA_DELETED)
-//                .success(true).status(HttpStatus.OK).build();
-//
-//        return new ResponseEntity<>(message, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping("/{eventId}")
-//    public ResponseEntity<ApiResponseMessage> deleteEventByEventID(@PathVariable String eventId) {
-//        this.eventService.deleteEventWithUserId(eventId);
-//        ApiResponseMessage message = ApiResponseMessage.builder().message(AppConstants.DATA_DELETED)
-//                .success(true).status(HttpStatus.OK).build();
-//
-//        return new ResponseEntity<>(message, HttpStatus.OK);
-//    }
-
     @GetMapping("/{eventId}")
     public ResponseEntity<ViewBookingRequest> getBookingDetails(@PathVariable String eventId) {
         ViewBookingRequest viewBookingRequest = this.eventService.viewBookingWithUser(eventId);
         return new ResponseEntity<>(viewBookingRequest, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<ApiResponse> deleteEventById(@PathVariable String eventId) {
+        String s = this.eventService.CancelEvent(eventId);
+        ApiResponse message = ApiResponse.builder().message(AppConstants.DATA_DELETED)
+                .success(true).build();
+
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 }

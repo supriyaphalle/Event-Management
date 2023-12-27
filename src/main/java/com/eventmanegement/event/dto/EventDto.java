@@ -17,7 +17,7 @@ public class EventDto {
 
     private String eventId;
 
-    private Date date;
+    private String date;
     private String name;
     private String location;
     private int ticketQuantity;

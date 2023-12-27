@@ -1,7 +1,9 @@
 package com.eventmanegement.event.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+import javax.persistence.*;
+
 import lombok.*;
 
 import java.util.Date;
@@ -12,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Entity
-@ToString
+//@ToString
 public class Ticket {
 
     @Id
