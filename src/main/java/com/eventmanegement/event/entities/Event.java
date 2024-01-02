@@ -22,7 +22,7 @@ public class Event {
 
     @Id
     private String eventId;
-    private LocalDate date;
+    private Date date;
     private String name;
     private String location;
     private int ticketQuantity;

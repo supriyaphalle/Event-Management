@@ -19,9 +19,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -47,18 +50,22 @@ public class EventServiceImpl implements EventService {
     public EventDto addEvent(EventDto eventDto) {
         String id = UUID.randomUUID().toString();
 
-        Event event = mapper.map(eventDto, Event.class);
+        Event event =new Event();
         LocalDate date = LocalDate.ofEpochDay(0);
         try {
-            date = LocalDate.parse(eventDto.getDate(), DateTimeFormatter.ISO_DATE);
-            System.out.println(date);
+//            date = LocalDate.parse(eventDto.getDate(), DateTimeFormatter.ISO_DATE);
+
+            Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(eventDto.getDate());
+
+            event.setDate(date1);
+            System.out.println(date1);
         } catch (IllegalArgumentException e) {
             System.out.println("Exception : " + e);
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeParseException | ParseException e) {
             System.out.println("Exception: " + e);
         }
-        event.setDate(date);
 
+        event = mapper.map(eventDto, Event.class);
         event.setEventId(id);
         Event save = eventRepository.save(event);
         return mapper.map(save, EventDto.class);
@@ -111,11 +118,11 @@ public class EventServiceImpl implements EventService {
         System.out.println(event.getName());
         List<Ticket> ticketList = this.ticketRepository.findByEvent(event);
         System.out.println(ticketList);
-        long count = ticketList.stream().count();
-        List<User> list = ticketList.stream().map(t -> t.getUser()).collect(Collectors.toList());
+        long count = ticketList.size();
+        List<User> list = ticketList.stream().map(Ticket::getUser).toList();
         List<UserDto> userDtos = list.stream().map(l -> mapper.map(l, UserDto.class)).collect(Collectors.toList());
-        ViewBookingRequest view = new ViewBookingRequest(count, userDtos);
-        return view;
+        return new ViewBookingRequest(count, userDtos);
+
     }
 
     @Override
@@ -124,7 +131,7 @@ public class EventServiceImpl implements EventService {
         System.out.println(event);
         LocalDate currentDate = LocalDate.now();
 
-        long remainingDays = java.time.temporal.ChronoUnit.DAYS.between(currentDate, event.getDate());
+        long remainingDays = java.time.temporal.ChronoUnit.DAYS.between((Temporal) currentDate, (Temporal) event.getDate());
 
         if (remainingDays >= 2) {
             this.eventRepository.deleteById(eventId);
